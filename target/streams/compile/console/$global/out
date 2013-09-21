@@ -1,7 +1,0 @@
-[debug] Starting sandboxed run...
-[debug] Waiting for threads to exit or System.exit to be called.
-[debug] Waiting for thread run-main to exit
-[info] Starting scala interpreter...
-[debug]   Boot classpath: /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsfd.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Frameworks/JavaRuntimeSupport.framework/Resources/Java/JavaRuntimeSupport.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/laf.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/sunrsasign.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jce.jar:/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar:/Users/dustin.conrad/.sbt/boot/scala-2.10.2/lib/scala-library.jar
-[debug]   Classpath: /Users/dustin.conrad/scala/recfun/target/scala-2.10/classes:/Users/dustin.conrad/.sbt/boot/scala-2.10.2/lib/scala-compiler.jar:/Users/dustin.conrad/.sbt/boot/scala-2.10.2/lib/jline.jar:/Users/dustin.conrad/.sbt/boot/scala-2.10.2/lib/jansi.jar:/Users/dustin.conrad/.sbt/boot/scala-2.10.2/lib/scala-reflect.jar
-[info] 
