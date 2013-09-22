@@ -42,18 +42,18 @@ object Main {
    */
 
   type CoinCombo = Map[Int,Int] //denomination -> count
-  def CoinCombo(kv: (Int,Int)*) = Map(kv: _*)
+  def newCoinCombo(kv: (Int,Int)*) = Map(kv: _*)
 
   type Combinations = Set[CoinCombo]
-  def Combinations(xs: CoinCombo*) = Set(xs: _*)
+  def newCombinations(xs: CoinCombo*) = Set(xs: _*)
 
   type Memo = Map[Int,Combinations]
-  def Memo(kv: (Int,Combinations)*) = Map(kv: _*)
+  def newMemo(kv: (Int,Combinations)*) = Map(kv: _*)
 
   def countChange(money: Int, coins: List[Int]): Int = {
-    val m = coins.foldLeft(Memo())((memo, coin) =>
-      memo + (coin -> Combinations(CoinCombo(coin -> 1).withDefaultValue(0))))
-    countChangeHelper(m.withDefaultValue(Combinations()), 1, money, coins)(money).size
+    val m = coins.foldLeft(newMemo())((memo, coin) =>
+      memo + (coin -> newCombinations(newCoinCombo(coin -> 1).withDefaultValue(0))))
+    countChangeHelper(m.withDefaultValue(newCombinations()), 1, money, coins)(money).size
   }
 
   @tailrec
