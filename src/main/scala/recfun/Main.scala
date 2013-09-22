@@ -37,21 +37,35 @@ object Main {
     case (a, _ :: rest) => balanceHelper(a, rest)
   }
 
-
-
   /**
    * Exercise 3
    */
-  def countChange(money: Int, coins: List[Int]): Int = (money, coins) match {
-    case (0, _) => 0
-    case (_, c) if(c.isEmpty) => 0
-    case (m, c :: rest) => 1 + countChange(m - c, rest)
 
+  type CoinCombo = Map[Int,Int] //denomination -> count
+  def CoinCombo(kv: (Int,Int)*) = Map(kv: _*)
+
+  type Combinations = Set[CoinCombo]
+  def Combinations(xs: CoinCombo*) = Set(xs: _*)
+
+  type Memo = Map[Int,Combinations]
+  def Memo(kv: (Int,Combinations)*) = Map(kv: _*)
+
+  def countChange(money: Int, coins: List[Int]): Int = {
+    val m = coins.foldLeft(Memo())((memo, coin) =>
+      memo + (coin -> Combinations(CoinCombo(coin -> 1).withDefaultValue(0))))
+    countChangeHelper(m.withDefaultValue(Combinations()), 1, money, coins)(money).size
   }
 
-  //@tailrec
-  def countChangeHelper(acc: Map[Int,Int], money: Int, coins: List[Int]): Int = ??? /*(acc, money, coins) match {
-    case (a, m, _) if(a.contains(money)) => a(money)
-    case (a, m, c) 
-  }*/
+  @tailrec
+  def countChangeHelper(acc: Memo, inc: Int, money: Int, coins: List[Int]): Memo = (acc, inc, money, coins) match {
+    case (a, i, m, _) if(i > m) => a
+    case (a, i, m, c) => {
+      val result = coins.foldLeft(a(i))((combos, coin) =>
+        combos.union(a(i - coin).map(coinCombo => coinCombo + (coin -> (coinCombo(coin) + 1))))
+      )
+      countChangeHelper((a + (i -> result)), i + 1, m, c)
+    }
+
+
+  }
 }
