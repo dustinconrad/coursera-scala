@@ -171,8 +171,17 @@ class FunSetSuite extends FunSuite {
     new TestSets {
 
       assert(forall(_ == 1, _ < 10), "forall(_ == 1, _ < 10)")
-      assert(!forall(_ <= 10, _ > 10), "!forall(_ <= 10, _ > 10)")
+      assert(!forall(_ <= 10, _ > 10), "forall(_ <= 10, _ > 10)")
       assert(!forall(_ > 1, _ < 10), "forall(_ > 1, _ < 10)")
+    }
+  }
+
+  test("test exists") {
+    new TestSets {
+
+      assert(exists(_ == 1, _ < 10), "exists(_ == 1, _ < 10)")
+      assert(!exists(_ <= 10, _ > 10), "exists(_ <= 10, _ > 10)")
+      assert(exists(_ > 1, _ < 10), "exists(_ > 1, _ < 10)")
     }
   }
 
