@@ -158,12 +158,22 @@ class FunSetSuite extends FunSuite {
 
   test("filter 1") {
     new TestSets {
-      val equals1 = filter(s1, (x: Int) => x == 1)
+      val equals1 = filter(s1, _ == 1)
       assert(contains(equals1, 1), "filter(1, _ == 1")
       assert(!contains(equals1, 2))
 
-      val lessThan1 = filter(s1, (x: Int) => x < 1)
+      val lessThan1 = filter(s1, _ < 1)
       assert(!contains(lessThan1,1))
     }
   }
+
+  test("test forall") {
+    new TestSets {
+
+      assert(forall(_ == 1, _ < 10), "forall(_ == 1, _ < 10)")
+      assert(!forall(_ <= 10, _ > 10), "!forall(_ <= 10, _ > 10)")
+      assert(!forall(_ > 1, _ < 10), "forall(_ > 1, _ < 10)")
+    }
+  }
+
 }
