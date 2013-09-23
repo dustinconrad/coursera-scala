@@ -16,7 +16,7 @@ submitProjectName := "funsets"
 
 // See documentation in ProgFunBuild.scala
 projectDetailsMap := {
-val currentCourseId = "progfun-002"
+val currentCourseId = "progfun-003"
 Map(
   "example" ->  ProjectDetails(
                   packageName = "example",
