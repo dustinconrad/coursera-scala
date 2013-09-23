@@ -2,7 +2,7 @@ name <<= submitProjectName(pname => "progfun-"+ pname)
 
 version := "1.0.0"
 
-scalaVersion := "2.10.1"
+scalaVersion := "2.10.2"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
@@ -32,7 +32,7 @@ Map(
                   courseId=currentCourseId),
   "funsets" ->    ProjectDetails(
                   packageName = "funsets",
-                  assignmentPartId = "fBXOL6Qd",
+                  assignmentPartId = "fBXOL6Rd",
                   maxScore = 10d,
                   styleScoreRatio = 0.2,
                   courseId=currentCourseId),
