@@ -21,6 +21,7 @@ submission/
 # IntelliJ
 .idea/
 .idea_modules/
+*.iml
 
 # Eclipse
 .classpath
