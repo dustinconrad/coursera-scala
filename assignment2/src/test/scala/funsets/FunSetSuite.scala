@@ -185,4 +185,15 @@ class FunSetSuite extends FunSuite {
     }
   }
 
+  test("test map") {
+    new TestSets {
+
+      val times10 = map(s1, _ * 10)
+      assert(contains(times10, 10))
+      assert(!contains(times10, 0))
+      assert(!contains(times10,20))
+
+    }
+  }
+
 }

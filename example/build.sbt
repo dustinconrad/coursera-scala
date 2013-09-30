@@ -12,7 +12,7 @@ libraryDependencies += "junit" % "junit" % "4.10" % "test"
 
 // This setting defines the project to which a solution is submitted. When creating a
 // handout, the 'createHandout' task will make sure that its value is correct.
-submitProjectName := "funsets"
+submitProjectName := "example"
 
 // See documentation in ProgFunBuild.scala
 projectDetailsMap := {
@@ -32,7 +32,7 @@ Map(
                   courseId=currentCourseId),
   "funsets" ->    ProjectDetails(
                   packageName = "funsets",
-                  assignmentPartId = "fBXOL6Rd",
+                  assignmentPartId = "fBXOL6Qd",
                   maxScore = 10d,
                   styleScoreRatio = 0.2,
                   courseId=currentCourseId),
