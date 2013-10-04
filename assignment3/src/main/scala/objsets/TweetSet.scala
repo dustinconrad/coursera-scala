@@ -77,12 +77,13 @@ abstract class TweetSet {
    * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def descendingByRetweet: TweetList = {
-    val mostR = this.mostRetweeted
-    if (mostR == null) Nil
-    else new Cons(mostR, this.remove(mostR).descendingByRetweet)
-  }
-
+  def descendingByRetweet: TweetList =
+    try {
+      val mostR = this.mostRetweeted
+      new Cons(mostR, this.remove(mostR).descendingByRetweet)
+    } catch {
+      case nsee: java.util.NoSuchElementException => Nil
+    }
 
   /**
    * The following methods are already implemented
@@ -118,7 +119,7 @@ class Empty extends TweetSet {
 
   def union(that: TweetSet): TweetSet = that
 
-  def mostRetweeted: Tweet = null
+  def mostRetweeted: Tweet = throw new java.util.NoSuchElementException("cannot get most retweeted of empty set")
 
   /**
    * The following methods are already implemented
@@ -141,11 +142,22 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     right.filterAcc(p,left.filterAcc(p, nacc))
   }
 
-  def union(that: TweetSet): TweetSet = left.union(right).union(that).incl(elem)
+  def union(that: TweetSet): TweetSet = left.union(right.union(that)).incl(elem)
 
   def mostRetweeted: Tweet = {
-    List(elem, left.mostRetweeted, right.mostRetweeted)
-      .filter(_ != null)
+    var candidates = List(elem)
+    try {
+      candidates = left.mostRetweeted :: candidates
+    } catch {
+      case nsee: java.util.NoSuchElementException =>
+    }
+    try {
+      candidates = right.mostRetweeted :: candidates
+    } catch {
+      case nsee: java.util.NoSuchElementException =>
+    }
+
+   candidates
       .sortWith( _.retweets > _.retweets)
       .head
   }
