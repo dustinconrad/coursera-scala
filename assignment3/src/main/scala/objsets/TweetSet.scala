@@ -12,6 +12,8 @@ class Tweet(val user: String, val text: String, val retweets: Int) {
     "Text: " + text + " [" + retweets + "]"
 }
 
+object NoTweet extends Tweet("","",0)
+
 /**
  * This represents a set of objects of type `Tweet` in the form of a binary search
  * tree. Every branch in the tree has two children (two `TweetSet`s). There is an
@@ -77,14 +79,11 @@ abstract class TweetSet {
    * Question: Should we implment this method here, or should it remain abstract
    * and be implemented in the subclasses?
    */
-  def descendingByRetweet: TweetList =
-    try {
+  def descendingByRetweet: TweetList = {
       val mostR = this.mostRetweeted
-      new Cons(mostR, this.remove(mostR).descendingByRetweet)
-    } catch {
-      case nsee: java.util.NoSuchElementException => Nil
-    }
-
+      if(mostR.isInstanceOf[NoTweet.type]) Nil
+      else new Cons(mostR, this.remove(mostR).descendingByRetweet)
+  }
   /**
    * The following methods are already implemented
    */
@@ -119,7 +118,7 @@ class Empty extends TweetSet {
 
   def union(that: TweetSet): TweetSet = that
 
-  def mostRetweeted: Tweet = throw new java.util.NoSuchElementException("cannot get most retweeted of empty set")
+  def mostRetweeted: Tweet = NoTweet
 
   /**
    * The following methods are already implemented
@@ -137,27 +136,14 @@ class Empty extends TweetSet {
 class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet = {
-    var nacc = acc
-    if(p(elem)) nacc = nacc.incl(elem)
-    right.filterAcc(p,left.filterAcc(p, nacc))
+    right.filterAcc(p,left.filterAcc(p, if(p(elem)) acc.incl(elem) else acc))
   }
 
   def union(that: TweetSet): TweetSet = left.union(right.union(that)).incl(elem)
 
   def mostRetweeted: Tweet = {
-    var candidates = List(elem)
-    try {
-      candidates = left.mostRetweeted :: candidates
-    } catch {
-      case nsee: java.util.NoSuchElementException =>
-    }
-    try {
-      candidates = right.mostRetweeted :: candidates
-    } catch {
-      case nsee: java.util.NoSuchElementException =>
-    }
-
-   candidates
+   List(elem, left.mostRetweeted, right.mostRetweeted)
+      .filter( !_.isInstanceOf[NoTweet.type])
       .sortWith( _.retweets > _.retweets)
       .head
   }
