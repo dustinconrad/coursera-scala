@@ -213,13 +213,13 @@ object Huffman {
 
   // Part 4b: Encoding using code table
 
-  type CodeTable = Map[Char,List[Bit]]
+  type CodeTable =  List[(Char, List[Bit])]
 
   /**
    * This function returns the bit sequence that represents the character `char` in
    * the code table `table`.
    */
-  def codeBits(table: CodeTable)(char: Char): List[Bit] = table.getOrElse(char, List[Bit]())
+  def codeBits(table: CodeTable)(char: Char): List[Bit] = table.find( pair => pair._1 == char ).head._2
 
   /**
    * Given a code tree, create a code table which contains, for every character in the
@@ -232,7 +232,7 @@ object Huffman {
   def convert(tree: CodeTree): CodeTable = convertHelper(tree, Nil)
 
   def convertHelper(tree: CodeTree, bits: List[Bit]): CodeTable = tree match {
-    case Leaf(c, _) => Map[Char,List[Bit]](c -> bits)
+    case Leaf(c, _) => List[(Char, List[Bit])](c -> bits)
     case Fork(l, r, _, _) => mergeCodeTables(convertHelper(l, bits :+ 0), convertHelper(r, bits :+ 1))
   }
 
