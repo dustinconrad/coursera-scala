@@ -60,10 +60,15 @@ object Anagrams {
    *    List(('a', 1), ('e', 1), ('t', 1)) -> Seq("ate", "eat", "tea")
    *
    */
-  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] = dictionary.foldLeft(Map[Occurrences, List[Word]]())()
+  lazy val dictionaryByOccurrences: Map[Occurrences, List[Word]] =
+    dictionary
+      .foldLeft(Map[Occurrences, List[Word]]().withDefaultValue(List[Word]()))(
+      (acc, w) =>
+        {val o = wordOccurrences(w)
+        acc + (o -> (acc(o) :+ w))})
 
   /** Returns all the anagrams of a given word. */
-  def wordAnagrams(word: Word): List[Word] = ???
+  def wordAnagrams(word: Word): List[Word] = dictionaryByOccurrences(wordOccurrences(word))
 
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`
@@ -87,7 +92,16 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = combinationsHelper(Set[Occurrences](List[(Char, Int)]()), occurrences).toList
+
+  def combinationsHelper(acc: Set[Occurrences], remaining: Occurrences): Set[Occurrences] = remaining match {
+    case e if e.isEmpty => acc
+    case h :: r => {
+      val occurrence = (h._1 -> 1)
+      val newCombos = acc.map(o => add(o,List(occurrence)))
+      combinationsHelper(acc ++ newCombos, subtract(remaining, List(occurrence)))
+    }
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 
@@ -99,7 +113,18 @@ object Anagrams {
    *  Note: the resulting value is an occurrence - meaning it is sorted
    *  and has no zero-entries.
    */
-  def subtract(x: Occurrences, y: Occurrences): Occurrences = ???
+  def subtract(x: Occurrences, y: Occurrences): Occurrences = {
+    val yMap = y.toMap
+    x.map(p => (p._1 -> (p._2 - yMap.getOrElse(p._1, 0)))).filter(p => p._2 > 0)
+  }
+
+  def add(x: Occurrences, y: Occurrences): Occurrences = (x,y) match {
+    case (o,e) if e.isEmpty => o
+    case (e,o) if e.isEmpty => o
+    case (h1::r1, h2::r2) if h1._1 == h2._1 => (h1._1 -> (h1._2 + h2._2)) +: add(r1,r2)
+    case (h1::r1, h2::r2) if h1._1 < h2._1 => h1 +: add(r1, y)
+    case (h1::r1, h2::r2) if h1._1 > h2._1 => h2 +: add(x, r2)
+  }
 
   /** Returns a list of all anagram sentences of the given sentence.
    *  
