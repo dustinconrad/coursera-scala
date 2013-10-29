@@ -123,7 +123,7 @@ object Anagrams {
     case (e,o) if e.isEmpty => o
     case (h1::r1, h2::r2) if h1._1 == h2._1 => (h1._1 -> (h1._2 + h2._2)) +: add(r1,r2)
     case (h1::r1, h2::r2) if h1._1 < h2._1 => h1 +: add(r1, y)
-    case (h1::r1, h2::r2) if h1._1 > h2._1 => h2 +: add(x, r2)
+    case (h1::r1, h2::r2) => h2 +: add(x, r2)
   }
 
   /** Returns a list of all anagram sentences of the given sentence.
