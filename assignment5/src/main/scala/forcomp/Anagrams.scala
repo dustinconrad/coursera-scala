@@ -43,7 +43,7 @@ object Anagrams {
 
   /** Converts a sentence into its character occurrence list. */
   def sentenceOccurrences(s: Sentence): Occurrences =
-    wordOccurrences(s.reduce[Word]((l, r) => l + r))
+    wordOccurrences(s.fold("")((l, r) => l + r))
 
   /** The `dictionaryByOccurrences` is a `Map` from different occurrences to a sequence of all
    *  the words that have that occurrence count.
@@ -167,5 +167,19 @@ object Anagrams {
    *  Note: There is only one anagram of an empty sentence.
    */
   def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
+
+  def sentenceAnagramsHelper(occurrences: Occurrences): List[Sentence] = occurrences match {
+    case e if e.isEmpty => List[Sentence](List[Word]())
+    case occ => {
+        combinations(occ)
+          .map(o => (o -> dictionaryByOccurrences(o)))
+            .map(p => p._2.map(w => (p._1 -> w)))
+            .reduce((l, r) => l ++ r)
+            .map(p => (p._2 -> subtract(occ, p._1)))
+            .map(p => (p._1 -> sentenceAnagramsHelper(p._2)))
+            .reduce((l,r ) => l._2 ++ r._2)
+
+    }
+  }
 
 }

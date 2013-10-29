@@ -71,7 +71,31 @@ class AnagramsSuite extends FunSuite {
     assert(combinations(abba).toSet === abbacomb.toSet)
   }
 
+  test("combinations: eat") {
+    val eat = List(('e', 1), ('a',1), ('t', 1))
+    val eatcomb = List(
+      List(),
+      List('e',1),
+      List('a',1),
+      List('t',1),
+      List(('e', 1), ('a', 1)),
+      List(('e', 1), ('t', 1)),
+      List(('a',1), ('t', 1)),
+      List(('e', 1), ('a',1), ('t', 1))
+    )
+  }
 
+  test("sentence anagram helper: a") {
+    val sentence = List("a")
+    val sentOcc = sentenceOccurrences(sentence)
+    assert(sentenceAnagramsHelper(sentOcc) === false)
+  }
+
+  test("sentence anagram helper: eat") {
+    val sentence = List("eat")
+    val sentOcc = sentenceOccurrences(sentence)
+    assert(sentenceAnagramsHelper(sentOcc) === false)
+  }
 
   test("sentence anagrams: []") {
     val sentence = List()
