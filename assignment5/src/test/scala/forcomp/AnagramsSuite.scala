@@ -85,18 +85,6 @@ class AnagramsSuite extends FunSuite {
     )
   }
 
-  test("sentence anagram helper: a") {
-    val sentence = List("a")
-    val sentOcc = sentenceOccurrences(sentence)
-    assert(sentenceAnagramsHelper(sentOcc) === false)
-  }
-
-  test("sentence anagram helper: eat") {
-    val sentence = List("eat")
-    val sentOcc = sentenceOccurrences(sentence)
-    assert(sentenceAnagramsHelper(sentOcc) === false)
-  }
-
   test("sentence anagrams: []") {
     val sentence = List()
     assert(sentenceAnagrams(sentence) === List(Nil))
@@ -127,6 +115,6 @@ class AnagramsSuite extends FunSuite {
       List("Linux", "rulez")
     )
     assert(sentenceAnagrams(sentence).toSet === anas.toSet)
-  }  
+  }
 
 }

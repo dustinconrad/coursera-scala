@@ -166,8 +166,7 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
-
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = sentenceAnagramsHelper(sentenceOccurrences(sentence))
   def sentenceAnagramsHelper(occurrences: Occurrences): List[Sentence] = occurrences match {
     case e if e.isEmpty => List[Sentence](List[Word]())
     case occ => {
@@ -177,8 +176,10 @@ object Anagrams {
             .reduce((l, r) => l ++ r)
             .map(p => (p._2 -> subtract(occ, p._1)))
             .map(p => (p._1 -> sentenceAnagramsHelper(p._2)))
-            .reduce((l,r ) => l._2 ++ r._2)
-
+            .map(p => p._2.map(s => p._1 +: s))
+            .reduceOption( (l,r) => l ++ r)
+            .getOrElse(List[Sentence](List[Word]()))
+            .filter(s => sentenceOccurrences(s).equals(occ))
     }
   }
 
