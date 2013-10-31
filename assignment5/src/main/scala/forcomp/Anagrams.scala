@@ -123,7 +123,7 @@ object Anagrams {
     case (e,o) if e.isEmpty => o
     case (h1::r1, h2::r2) if h1._1 == h2._1 => (h1._1 -> (h1._2 + h2._2)) +: add(r1,r2)
     case (h1::r1, h2::r2) if h1._1 < h2._1 => h1 +: add(r1, y)
-    case (h1::r1, h2::r2) if h1._1 > h2._1 => h2 +: add(x, r2)
+    case (h1::r1, h2::r2) => h2 +: add(x, r2)
   }
 
   /** Returns a list of all anagram sentences of the given sentence.
@@ -166,8 +166,7 @@ object Anagrams {
    *
    *  Note: There is only one anagram of an empty sentence.
    */
-  def sentenceAnagrams(sentence: Sentence): List[Sentence] = ???
-
+  def sentenceAnagrams(sentence: Sentence): List[Sentence] = sentenceAnagramsHelper(sentenceOccurrences(sentence))
   def sentenceAnagramsHelper(occurrences: Occurrences): List[Sentence] = occurrences match {
     case e if e.isEmpty => List[Sentence](List[Word]())
     case occ => {
@@ -177,8 +176,10 @@ object Anagrams {
             .reduce((l, r) => l ++ r)
             .map(p => (p._2 -> subtract(occ, p._1)))
             .map(p => (p._1 -> sentenceAnagramsHelper(p._2)))
-            .reduce((l,r ) => l._2 ++ r._2)
-
+            .map(p => p._2.map(s => p._1 +: s))
+            .reduceOption( (l,r) => l ++ r)
+            .getOrElse(List[Sentence](List[Word]()))
+            .filter(s => sentenceOccurrences(s).equals(occ))
     }
   }
 
