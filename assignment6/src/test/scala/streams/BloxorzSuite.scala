@@ -53,6 +53,39 @@ class BloxorzSuite extends FunSuite {
     }
   }
 
+  test("move") {
+    new Level1 {
+      assert(Block(Pos(1,1),Pos(1,1)).right === Block(Pos(1,2),Pos(1,3)))
+      assert(Block(Pos(1,1),Pos(1,1)).down === Block(Pos(2,1),Pos(3,1)))
+    }
+  }
+
+  test("neighborsWithHistory") {
+    new Level1 {
+      val expected = Set(
+        (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      )
+      assert(neighborsWithHistory(Block(Pos(1,1),Pos(1,1)), List(Left,Up)).toSet === expected)
+    }
+  }
+
+  test("newNeighborsOnly") {
+    new Level1 {
+      val actual = newNeighborsOnly(
+        Set(
+          (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+          (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+        ).toStream,
+        Set(Block(Pos(1,2),Pos(1,3)), Block(Pos(1,1),Pos(1,1)))
+      )
+      val expected = Set(
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      ).toStream
+      assert(actual === expected)
+    }
+  }
+
   test("optimal solution for level 1") {
     new Level1 {
       assert(solve(solution) == Block(goal, goal))
