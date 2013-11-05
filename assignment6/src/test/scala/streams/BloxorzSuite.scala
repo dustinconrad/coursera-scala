@@ -40,6 +40,25 @@ class BloxorzSuite extends FunSuite {
     val optsolution = List(Right, Right, Down, Right, Right, Right, Down)
   }
 
+  trait InfiniteSolutionChecker extends InfiniteTerrain with Solver {
+    val startPos = Pos(50, 50);
+    val goal = Pos(55, 55)
+  }
+
+  trait Level6 extends SolutionChecker {
+    val level =
+      """-------oooooo--
+        |-----o--ooo----
+        |-----o--ooooo--
+        |Sooooo-----oooo
+        |----ooo----ooTo
+        |----ooo-----ooo
+        |------o--oo----
+        |------ooooo----
+        |------ooooo----
+        |-------ooo-----""".stripMargin
+  }
+
   test("terrain function level 1") {
     new Level1 {
       assert(terrain(Pos(0,0)), "0,0")
@@ -97,4 +116,17 @@ class BloxorzSuite extends FunSuite {
       assert(solution.length == optsolution.length)
     }
   }
+
+  test("infinite solution") {
+    new InfiniteSolutionChecker {
+      assert(solution.length == 8)
+    }
+  }
+
+  test("no solution") {
+    new Level6 {
+      assert(solution.isEmpty)
+    }
+  }
+
 }
